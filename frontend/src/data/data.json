@@ -1,0 +1,54 @@
+[
+    {
+        "id": 1,
+        "author": "John Doe",
+        "title": "Understanding React",
+        "description": "A comprehensive guide to mastering React.js, covering hooks, state management, and component lifecycle.",
+        "priority": "High",
+        "status": "In Progress",
+        "assignedTo": "Bob Brown",
+        "dueDate": "2023-10-15T12:00:00Z",
+        "tags": ["React", "JavaScript", "Frontend Development"],
+        "createdAt": "2023-10-01T12:00:00Z",
+        "updatedAt": "2023-10-05T15:30:00Z"
+    },
+    {
+        "id": 2,
+        "author": "Jane Smith",
+        "title": "Next.js for Beginners",
+        "description": "An introduction to Next.js, focusing on server-side rendering and static site generation.",
+        "priority": "Medium",
+        "status": "Done",
+        "assignedTo": "Alice Johnson",
+        "dueDate": "2023-10-20T17:00:00Z",
+        "tags": ["Next.js", "React", "Web Development"],
+        "createdAt": "2023-09-15T09:00:00Z",
+        "updatedAt": "2023-09-20T10:15:00Z"
+    },
+    {
+        "id": 3,
+        "author": "Alice Johnson",
+        "title": "Advanced CSS Techniques",
+        "description": "Exploring advanced CSS features like Grid, Flexbox, and animations to enhance web design.",
+        "priority": "Low",
+        "status": "In Progress",
+        "assignedTo": "John Doe",
+        "dueDate": "2023-11-01T14:00:00Z",
+        "tags": ["CSS", "Web Design", "Frontend Development"],
+        "createdAt": "2023-08-10T14:00:00Z",
+        "updatedAt": null
+    },
+    {
+        "id": 4,
+        "author": "Bob Brown",
+        "title": "TypeScript Deep Dive",
+        "description": "A deep dive into TypeScript, covering types, interfaces, and generics for robust application development.",
+        "priority": "High",
+        "status": "To Do",
+        "assignedTo": "Jane Smith",
+        "dueDate": "2023-10-30T09:00:00Z",
+        "tags": ["TypeScript", "JavaScript", "Backend Development"],
+        "createdAt": "2023-10-10T08:30:00Z",
+        "updatedAt": null
+    }
+]
