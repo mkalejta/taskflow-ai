@@ -1,0 +1,147 @@
+/* colors.css - Paleta kolorów dla Taskflow AI */
+
+:root {
+  /* === PURPLE (Primary/Brand) === */
+  --purple-50: #faf5ff;
+  --purple-100: #f3e8ff;
+  --purple-200: #e9d5ff;
+  --purple-300: #d8b4fe;
+  --purple-400: #c084fc;
+  --purple-500: #a855f7;  /* Main brand color */
+  --purple-600: #9333ea;
+  --purple-700: #7c3aed;
+  --purple-800: #6b21a8;
+  --purple-900: #581c87;
+
+  /* === NAVY (Secondary/Professional) === */
+  --navy-50: #f8fafc;
+  --navy-100: #f1f5f9;
+  --navy-200: #e2e8f0;
+  --navy-300: #cbd5e1;
+  --navy-400: #94a3b8;
+  --navy-500: #64748b;
+  --navy-600: #475569;
+  --navy-700: #334155;
+  --navy-800: #1e293b;
+  --navy-900: #0f172a;
+
+  /* === BEIGE (Warm/Neutral) === */
+  --beige-50: #fefdfb;
+  --beige-100: #fef7ed;
+  --beige-200: #fdefd6;
+  --beige-300: #fbe3b8;
+  --beige-400: #f7d18a;
+  --beige-500: #f2bd5c;
+  --beige-600: #e8a437;
+  --beige-700: #d18b1f;
+  --beige-800: #b86f19;
+  --beige-900: #975a1a;
+
+  /* === GRAY (Cool Neutral) === */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* === SEMANTIC ALIASES === */
+  --primary: var(--purple-500);
+  --primary-light: var(--purple-400);
+  --primary-dark: var(--purple-600);
+
+  --secondary: var(--navy-500);
+  --secondary-light: var(--navy-400);
+  --secondary-dark: var(--navy-600);
+
+  --accent: var(--beige-500);
+  --accent-light: var(--beige-400);
+  --accent-dark: var(--beige-600);
+
+  --neutral: var(--gray-500);
+  --neutral-light: var(--gray-400);
+  --neutral-dark: var(--gray-600);
+
+  /* === TASK PRIORITIES === */
+  --priority-low: var(--beige-600);      /* Beż dla niskiego */
+  --priority-medium: var(--purple-500);  /* Fiolet dla średniego */
+  --priority-high: var(--navy-700);      /* Granat dla wysokiego */
+
+  /* === TASK STATUSES === */
+  --status-todo: var(--gray-400);        /* Szary dla todo */
+  --status-in-progress: var(--purple-500); /* Fiolet dla w trakcie */
+  --status-done: var(--beige-600);       /* Beż dla ukończonych */
+
+  /* === COMMON USAGE === */
+  --background: #ffffff;
+  --background-secondary: var(--gray-50);
+  --background-warm: var(--beige-50);
+  --text-primary: var(--navy-800);
+  --text-secondary: var(--gray-600);
+  --text-light: var(--gray-400);
+  --border: var(--gray-200);
+  --border-dark: var(--gray-300);
+  --border-accent: var(--beige-200);
+}
+
+/* === UTILITY CLASSES === */
+.text-purple { color: var(--purple-500); }
+.text-navy { color: var(--navy-600); }
+.text-beige { color: var(--beige-600); }
+.text-gray { color: var(--gray-500); }
+
+.bg-purple { background-color: var(--purple-500); }
+.bg-navy { background-color: var(--navy-600); }
+.bg-beige { background-color: var(--beige-500); }
+.bg-gray { background-color: var(--gray-500); }
+
+.bg-purple-light { background-color: var(--purple-50); }
+.bg-navy-light { background-color: var(--navy-50); }
+.bg-beige-light { background-color: var(--beige-50); }
+.bg-gray-light { background-color: var(--gray-50); }
+
+.border-purple { border-color: var(--purple-500); }
+.border-navy { border-color: var(--navy-500); }
+.border-beige { border-color: var(--beige-500); }
+.border-gray { border-color: var(--gray-200); }
+
+/* === TASK-SPECIFIC CLASSES === */
+.priority-low {
+  color: var(--priority-low);
+  background-color: var(--beige-50);
+  border: 1px solid var(--beige-200);
+}
+
+.priority-medium {
+  color: var(--priority-medium);
+  background-color: var(--purple-50);
+  border: 1px solid var(--purple-200);
+}
+
+.priority-high {
+  color: var(--priority-high);
+  background-color: var(--navy-50);
+  border: 1px solid var(--navy-200);
+}
+
+.status-todo {
+  color: var(--status-todo);
+  background-color: var(--gray-50);
+  border: 1px solid var(--gray-200);
+}
+
+.status-in-progress {
+  color: var(--status-in-progress);
+  background-color: var(--purple-50);
+  border: 1px solid var(--purple-200);
+}
+
+.status-done {
+  color: var(--status-done);
+  background-color: var(--beige-50);
+  border: 1px solid var(--beige-200);
+}

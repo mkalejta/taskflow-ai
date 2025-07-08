@@ -6,10 +6,10 @@ import { RiProgress1Line, RiProgress3Line,
 import { IoCheckmarkDone } from "react-icons/io5";
 import type { Task } from "@/types";
 import { TaskStatus } from "@/types/enums";
-import { useRouter } from "next/navigation";
 
 type TaskProps = {
     task: Task;
+    onTaskSelect: (task: Task) => void;
 }
 
 const status_icons = {
@@ -18,18 +18,25 @@ const status_icons = {
     [TaskStatus.DONE]: <IoCheckmarkDone className={styles.status_done}/>
 };
 
-export default function Task({ task }: TaskProps) {
-    const router = useRouter();
+export default function Task({ task, onTaskSelect }: TaskProps) {
+    const handleTaskClick = () => {
+        onTaskSelect(task);
+    };
 
     return (
-        <button onClick={() => router.push(`/task-details/${task.id}`)} className={styles.container}>
+        <button onClick={handleTaskClick} className={styles.container}>
             <div className={styles.icon}>
                 {status_icons[task.status]}
             </div>
             <div className={styles.content}>
                 <h3>{task.title}</h3>
                 <p>{task.description}</p>
-                <span>Priority: {task.priority}</span>
+                <div className={styles.metaItem}>
+                    <span className={styles.label}>Priority:</span>
+                    <span className={styles[`priority-${task.priority.toLowerCase()}`]}>
+                        {task.priority}
+                    </span>
+                </div>
             </div>
         </button>
     );

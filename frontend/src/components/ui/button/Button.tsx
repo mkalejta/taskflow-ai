@@ -3,15 +3,19 @@
 import styles from "./button.module.css";
 
 type ButtonProps = {
-    title?: string;
+    title: string;
     onClick?: () => void;
-    variant?: 'default' | 'profile' | 'nav' | 'active' | 'sidebar';
+    variant?: 'default' | 'profile' | 'nav' | 'active' | 'back' | 'sidebar' | 'outline';
+    icon?: React.ReactNode;
 }
 
-export const Button = ({title, onClick, variant = "default"}: ButtonProps) => {
+export function Button({ title, onClick, variant = 'default', icon }: ButtonProps) {
     const buttonClass = `${styles.button} ${styles[variant]}`;
-
+    
     return (
-        <button className={buttonClass} onClick={onClick} >{title}</button>
-    )
+        <button className={buttonClass} onClick={onClick}>
+            {icon && <span className={styles.icon}>{icon}</span>}
+            {title && <span>{title}</span>}
+        </button>
+    );
 }

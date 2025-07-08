@@ -10,14 +10,15 @@ export default function Sidebar() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.top}>
+            <div className={styles.top} onClick={() => router.push("/")}>
                 <FaTasks size={30}/> {/* Docelowo tu będzie logo*/}
                 <h1>Taskflow AI</h1>
             </div>
             <div className={styles.mid}>
-                <div>Home</div>
-                <div>About</div>
-                <div>Contact</div>
+                <div className={styles.new}>New Chat +</div>
+                <div>Dashboard</div>
+                <div>Templates</div>
+                <div>History</div>
             </div>
             <div className={styles.bottom}>
                 <Button title="Login" variant="sidebar" onClick={() => router.push("/login")}/>
