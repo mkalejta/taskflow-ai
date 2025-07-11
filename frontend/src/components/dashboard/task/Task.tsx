@@ -13,9 +13,9 @@ type TaskProps = {
 }
 
 const status_icons = {
-    [TaskStatus.TODO]: <FaCheck className={styles.status_todo}/>,
-    [TaskStatus.IN_PROGRESS]: <RiProgress1Line className={styles.status_inprogress}/>,
-    [TaskStatus.DONE]: <IoCheckmarkDone className={styles.status_done}/>
+    [TaskStatus.TODO]: <FaCheck className={`${styles.status_todo} ${styles.status}`}/>,
+    [TaskStatus.IN_PROGRESS]: <RiProgress1Line className={`${styles.status_inprogress} ${styles.status}`}/>,
+    [TaskStatus.DONE]: <IoCheckmarkDone className={`${styles.status_done} ${styles.status}`}/>
 };
 
 export default function Task({ task, onTaskSelect }: TaskProps) {
@@ -33,7 +33,7 @@ export default function Task({ task, onTaskSelect }: TaskProps) {
                 <p>{task.description}</p>
                 <div className={styles.metaItem}>
                     <span className={styles.label}>Priority:</span>
-                    <span className={styles[`priority-${task.priority.toLowerCase()}`]}>
+                    <span className={`${styles[`priority-${task.priority.toLowerCase()}`]} ${styles.priority}`}>
                         {task.priority}
                     </span>
                 </div>

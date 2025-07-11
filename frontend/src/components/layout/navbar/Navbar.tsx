@@ -7,7 +7,6 @@ import { IoChevronForward } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const templateOptions = ["Kanban", "Step list", "Visualisation"]; // karuzela z tymi templatami i zdjęciami
   const router = useRouter();
 
   return (
@@ -36,7 +35,7 @@ export default function Header() {
           About us
         </div>
       </div>
-      <Button title="Get started" variant="nav" icon={<IoChevronForward />}/>
+      <Button title="Get started" variant="nav" icon={<IoChevronForward />} onClick={() => router.push('/registration')}/>
     </div>
   );
 }

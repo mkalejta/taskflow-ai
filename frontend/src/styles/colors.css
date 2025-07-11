@@ -67,14 +67,14 @@
   --neutral-dark: var(--gray-600);
 
   /* === TASK PRIORITIES === */
-  --priority-low: var(--beige-600);      /* Beż dla niskiego */
+  --priority-low: var(--gray-500);      /* Beż dla niskiego */
   --priority-medium: var(--purple-500);  /* Fiolet dla średniego */
-  --priority-high: var(--navy-700);      /* Granat dla wysokiego */
+  --priority-high: #f54028;       /* Granat dla wysokiego */
 
   /* === TASK STATUSES === */
-  --status-todo: var(--gray-400);        /* Szary dla todo */
+  --status-todo: var(--gray-500);        /* Szary dla todo */
   --status-in-progress: var(--purple-500); /* Fiolet dla w trakcie */
-  --status-done: var(--beige-600);       /* Beż dla ukończonych */
+  --status-done: #1dfc00;      /* Beż dla ukończonych */
 
   /* === COMMON USAGE === */
   --background: #ffffff;
@@ -108,40 +108,3 @@
 .border-navy { border-color: var(--navy-500); }
 .border-beige { border-color: var(--beige-500); }
 .border-gray { border-color: var(--gray-200); }
-
-/* === TASK-SPECIFIC CLASSES === */
-.priority-low {
-  color: var(--priority-low);
-  background-color: var(--beige-50);
-  border: 1px solid var(--beige-200);
-}
-
-.priority-medium {
-  color: var(--priority-medium);
-  background-color: var(--purple-50);
-  border: 1px solid var(--purple-200);
-}
-
-.priority-high {
-  color: var(--priority-high);
-  background-color: var(--navy-50);
-  border: 1px solid var(--navy-200);
-}
-
-.status-todo {
-  color: var(--status-todo);
-  background-color: var(--gray-50);
-  border: 1px solid var(--gray-200);
-}
-
-.status-in-progress {
-  color: var(--status-in-progress);
-  background-color: var(--purple-50);
-  border: 1px solid var(--purple-200);
-}
-
-.status-done {
-  color: var(--status-done);
-  background-color: var(--beige-50);
-  border: 1px solid var(--beige-200);
-}

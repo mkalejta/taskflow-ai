@@ -5,7 +5,6 @@ import styles from "./dashboard.module.css";
 import Section from "@/components/dashboard/section/Section";
 import { TaskStatus } from "@/types/enums";
 import FilterBar from "@/components/dashboard/filterbar/FilterBar";
-import { Button } from "@/components/ui/button/Button";
 import TaskDetails from "@/components/dashboard/task-details/TaskDetails";
 import type { Task } from "@/types";
 
@@ -66,7 +65,6 @@ export default function Dashboard() {
         <div className={styles.content}>
             <div className={styles.top}>
                 <h1>Dashboard</h1>
-                <Button title="MK" variant="profile"/>
             </div>
             
             {!selectedTask && (

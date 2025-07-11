@@ -5,7 +5,7 @@ import styles from "./button.module.css";
 type ButtonProps = {
     title: string;
     onClick?: () => void;
-    variant?: 'default' | 'profile' | 'nav' | 'active' | 'back' | 'sidebar' | 'outline';
+    variant?: 'default' | 'nav' | 'active' | 'back' | 'sidebar' | 'outline';
     icon?: React.ReactNode;
 }
 

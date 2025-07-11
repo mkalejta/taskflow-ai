@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import styles from './carousel.module.css';
 
@@ -19,33 +19,35 @@ type CarouselProps = {
   autoPlayInterval?: number;
 };
 
-export default function Carousel({ items, autoPlay = true, autoPlayInterval = 5000 }: CarouselProps) {
+export default function Carousel({ items, autoPlay = true, autoPlayInterval = 7000 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
-  };
+  }, [items.length]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + items.length) % items.length);
-  };
+  }, [items.length]);
 
-  const goToSlide = (index: number) => {
+  const goToSlide = useCallback((index: number) => {
     setCurrentIndex(index);
-  };
+  }, []);
 
   // Handle video time control
   const handleVideoLoad = (videoElement: HTMLVideoElement, item: CarouselItem, index: number) => {
     if (index === currentIndex) {
       videoElement.currentTime = item.startTime;
-      videoElement.play();
+      if (!document.hidden) {
+        videoElement.play();
+      }
     }
   };
 
   const handleTimeUpdate = (videoElement: HTMLVideoElement, item: CarouselItem) => {
     if (videoElement.currentTime >= item.endTime) {
-      videoElement.currentTime = item.startTime; // Loop fragment
+      videoElement.currentTime = item.startTime;
     }
   };
 
@@ -64,7 +66,9 @@ export default function Carousel({ items, autoPlay = true, autoPlayInterval = 50
 
       // Set current video to start time and play
       currentVideo.currentTime = currentItem.startTime;
-      currentVideo.play().catch(console.error);
+      if (!document.hidden) {
+        currentVideo.play().catch(console.error);
+      }
     }
   }, [currentIndex, items]);
 
@@ -97,7 +101,7 @@ export default function Carousel({ items, autoPlay = true, autoPlayInterval = 50
                   width="600" 
                   height="400" 
                   controls 
-                  loop={false}
+                  loop={true}
                   muted 
                   preload="metadata" 
                   className={styles.exampleVideo}
@@ -106,7 +110,9 @@ export default function Carousel({ items, autoPlay = true, autoPlayInterval = 50
                   onEnded={(e) => {
                     // When fragment ends, restart from beginning of fragment
                     e.currentTarget.currentTime = item.startTime;
-                    e.currentTarget.play();
+                    if (!document.hidden) {
+                      e.currentTarget.play();
+                    }
                   }}
                 >
                   <source src={item.videoSrc} type="video/mp4" />

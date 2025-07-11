@@ -50,6 +50,7 @@
     background-color: var(--primary-light); /* Jasny fiolet przy hover */
     font-size: 20px;
     transition: color 0.2s;
+    flex-grow: 10;
 }
 
 .metaItem .metaItem {

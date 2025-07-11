@@ -8,7 +8,6 @@ export const SECTION_TITLES = {
 
 export const BUTTON_VARIANTS = {
     DEFAULT: 'default',
-    PROFILE: 'profile',
     NAV: 'nav',
     SIDEBAR: 'sidebar'
 } as const;
