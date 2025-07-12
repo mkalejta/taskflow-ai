@@ -104,7 +104,7 @@
 .bg-beige-light { background-color: var(--beige-50); }
 .bg-gray-light { background-color: var(--gray-50); }
 
-.border-purple { border-color: var(--purple-500); }
-.border-navy { border-color: var(--navy-500); }
-.border-beige { border-color: var(--beige-500); }
-.border-gray { border-color: var(--gray-200); }
+.border-purple { border-color: var(--purple-500); border-width: 3px; border-style: solid; }
+.border-navy { border-color: var(--navy-500); border-width: 3px; border-style: solid;}
+.border-beige { border-color: var(--beige-500); border-width: 3px; border-style: solid; }
+.border-gray { border-color: var(--gray-200); border-width: 3px; border-style: solid;}
