@@ -1,6 +1,8 @@
 from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from app.db.db import Base
+from sqlalchemy.sql import func
+
 
 association_table = Table('task_tags', Base.metadata,
     Column('task_id', ForeignKey('tasks.id')),
@@ -51,8 +53,8 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)
-    created_at = Column(DateTime, nullable=False)
-    updated_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=func.now())
     author_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 
     author = relationship('User', back_populates='projects')

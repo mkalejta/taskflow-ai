@@ -15,3 +15,6 @@ class ProjectResponse(BaseModel):
     created_at: datetime
     updated_at: datetime | None
     author: str
+
+    class Config:
+        orm_mode = True
