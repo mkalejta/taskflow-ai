@@ -44,15 +44,15 @@ def add_project(project: ProjectRequest, db: Session) -> ProjectResponse:
 
 
 def update_project(id: int, project: ProjectRequest, db: Session) -> ProjectResponse:
-    new_project = convert_project_request(project)
     old_project = db.query(Project).get(id)
     if old_project is None:
         raise HTTPException(status_code=404, detail="projects not found!")
-    new_project.updated_at = datetime.datetime.now()
-    db.add(new_project)
+    for k, v in project.dict():
+        old_project[k] = v
+    old_project.updated_at = datetime.datetime.now()
     db.commit()
-    db.refresh(new_project)
-    return convert_to_project_response(new_project, db)
+    db.refresh(old_project)
+    return convert_to_project_response(old_project, db)
 
 
 def delete_project(id: int, db: Session) -> str:
