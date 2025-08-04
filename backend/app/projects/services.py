@@ -1,3 +1,5 @@
+import datetime
+
 from app.projects.schemas import ProjectRequest, ProjectResponse
 from app.db.models import User, Project
 from fastapi import HTTPException
@@ -5,8 +7,7 @@ from sqlalchemy.orm import Session
 
 def convert_project_request(project: ProjectRequest) -> Project:
     """Converts ProjectRequest object to projects object"""
-    project_model = Project(**project.dict())
-    return project_model
+    return Project(**project.dict())
 
 
 def convert_to_project_response(project: Project, db: Session) -> ProjectResponse:
@@ -16,42 +17,42 @@ def convert_to_project_response(project: Project, db: Session) -> ProjectRespons
         id=project.id,
         name=project.name,
         description=project.description,
+        created_at=project.created_at,
+        updated_at=project.updated_at,
         author=author
     )
 
 def get_projects(db: Session) -> list[ProjectResponse]:
     projects = db.query(Project).all()
-    response = [convert_to_project_response(p, db) for p in projects]
-    return response
+    return [convert_to_project_response(p, db) for p in projects]
 
 
 def get_project(id: int, db: Session) -> ProjectResponse:
     project = db.query(Project).get(id)
     if project is None:
         raise HTTPException(status_code=404, detail="projects not found!")
-    response = convert_to_project_response(project, db)
-    return response
+    return convert_to_project_response(project, db)
 
 
 def add_project(project: ProjectRequest, db: Session) -> ProjectResponse:
     new_project = convert_project_request(project)
+    new_project.created_at = datetime.datetime.now()
     db.add(new_project)
     db.commit()
     db.refresh(new_project)
-    response = convert_to_project_response(new_project, db)
-    return response
+    return convert_to_project_response(new_project, db)
 
 
-def update_project(project: ProjectRequest, db: Session) -> ProjectResponse:
+def update_project(id: int, project: ProjectRequest, db: Session) -> ProjectResponse:
     new_project = convert_project_request(project)
     old_project = db.query(Project).get(id)
     if old_project is None:
         raise HTTPException(status_code=404, detail="projects not found!")
+    new_project.updated_at = datetime.datetime.now()
     db.add(new_project)
     db.commit()
     db.refresh(new_project)
-    response = convert_to_project_response(new_project, db)
-    return response
+    return convert_to_project_response(new_project, db)
 
 
 def delete_project(id: int, db: Session) -> str:
