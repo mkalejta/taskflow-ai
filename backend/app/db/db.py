@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy_utils import database_exists, create_database
 from app.settings import postgres as settings
 
@@ -20,7 +20,6 @@ def get_engine_from_settings():
     return get_engine(settings['pguser'], settings['pgpasswd'], settings['pghost'], settings['pgport'], settings['pgdb'])
 
 
-def get_session():
-    engine = get_engine_from_settings()
-    session = sessionmaker(bind=engine)()
-    return session
+engine = get_engine_from_settings()
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+Base = declarative_base()

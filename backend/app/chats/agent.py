@@ -1,6 +1,6 @@
 import os
 from openai import OpenAI
-from app.schemas.Chat import ChatMessage, ChatCompletionRequest, ChatCompletionResponse
+from app.chats.schemas import ChatMessage, ChatCompletionRequest, ChatCompletionResponse
 
 class OpenAIChatClient:
     def __init__(self, api_key: str):

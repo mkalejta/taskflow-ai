@@ -1,0 +1,15 @@
+from pydantic import BaseModel
+from datetime import datetime
+
+
+class ProjectRequest(BaseModel):
+    name: str
+    description: str
+    author_id: int
+
+
+class ProjectResponse(BaseModel):
+    id: int
+    name: str
+    description: str
+    author: str
