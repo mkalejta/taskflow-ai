@@ -36,7 +36,7 @@ def get_project(id: int, db: Session) -> ProjectResponse:
 
 def add_project(project: ProjectRequest, db: Session) -> ProjectResponse:
     new_project = convert_project_request(project)
-    new_project.created_at = datetime.datetime.now()
+    new_project.created_at = datetime.datetime.now(tz=datetime.timezone.utc)
     db.add(new_project)
     db.commit()
     db.refresh(new_project)
@@ -61,4 +61,4 @@ def delete_project(id: int, db: Session) -> str:
         raise HTTPException(status_code=404, detail="Project not found!")
     db.delete(project)
     db.commit()
-    return 'projects deleted successfully.'
+    return 'Project deleted successfully.'
