@@ -1,63 +1,49 @@
 from app.projects.schemas import ProjectRequest, ProjectResponse
 from app.db.models import User, Project
 from fastapi import HTTPException
-from sqlalchemy.orm import Session
-
-def convert_project_request(project: ProjectRequest) -> Project:
-    """Converts ProjectRequest object to projects object"""
-    project_model = Project(**project.dict())
-    return project_model
+from sqlalchemy.orm import Session, joinedload
 
 
 def convert_to_project_response(project: Project, db: Session) -> ProjectResponse:
     """Converts projects object to ProjectResponse object"""
-    author = db.query(User).get(project.author_id).full_name()
-    return ProjectResponse(
-        id=project.id,
-        name=project.name,
-        description=project.description,
-        author=author
-    )
+    return ProjectResponse.from_orm(project).copy(update={"author": db.query(User).get(project.author_id).full_name()})
+
 
 def get_projects(db: Session) -> list[ProjectResponse]:
-    projects = db.query(Project).all()
-    response = [convert_to_project_response(p, db) for p in projects]
-    return response
+    projects = db.query(Project).options(joinedload(Project.author)).all()  # automatic data attachment from 'users' table to sent less request to db
+    return [ProjectResponse.from_orm(p).copy(update={"author": p.author.full_name()}) for p in projects]
 
 
 def get_project(id: int, db: Session) -> ProjectResponse:
     project = db.query(Project).get(id)
     if project is None:
-        raise HTTPException(status_code=404, detail="projects not found!")
-    response = convert_to_project_response(project, db)
-    return response
+        raise HTTPException(status_code=404, detail="Project not found!")
+    return convert_to_project_response(project, db)
 
 
 def add_project(project: ProjectRequest, db: Session) -> ProjectResponse:
-    new_project = convert_project_request(project)
+    new_project = Project(**project.dict())
     db.add(new_project)
     db.commit()
     db.refresh(new_project)
-    response = convert_to_project_response(new_project, db)
-    return response
+    return convert_to_project_response(new_project, db)
 
 
-def update_project(project: ProjectRequest, db: Session) -> ProjectResponse:
-    new_project = convert_project_request(project)
+def update_project(id: int, project: ProjectRequest, db: Session) -> ProjectResponse:
     old_project = db.query(Project).get(id)
     if old_project is None:
-        raise HTTPException(status_code=404, detail="projects not found!")
-    db.add(new_project)
+        raise HTTPException(status_code=404, detail="Project not found!")
+    for k, v in project.dict().items():
+        setattr(old_project, k, v)
     db.commit()
-    db.refresh(new_project)
-    response = convert_to_project_response(new_project, db)
-    return response
+    db.refresh(old_project)
+    return convert_to_project_response(old_project, db)
 
 
 def delete_project(id: int, db: Session) -> str:
     project = db.query(Project).get(id)
     if project is None:
-        raise HTTPException(status_code=404, detail="projects not found!")
+        raise HTTPException(status_code=404, detail="Project not found!")
     db.delete(project)
     db.commit()
-    return 'projects deleted successfully.'
+    return 'Project deleted successfully.'

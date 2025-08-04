@@ -12,4 +12,9 @@ class ProjectResponse(BaseModel):
     id: int
     name: str
     description: str
+    created_at: datetime
+    updated_at: datetime | None
     author: str
+
+    class Config:
+        orm_mode = True
