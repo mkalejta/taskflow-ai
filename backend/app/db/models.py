@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from app.db.db import Base
 from sqlalchemy.sql import func
@@ -39,7 +39,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     full_name = Column(String, nullable=True)
     hashed_password = Column(String, nullable=False)
-    is_active = Column(Integer, default=1)  # 1 for active, 0 for inactive
+    is_active = Column(Boolean, default=False)  # True for active, False for inactive
 
     assigned_tasks = relationship('Task', back_populates='assignee', foreign_keys='Task.assigned_to')
     authored_tasks = relationship('Task', back_populates='author', foreign_keys='Task.author_id')
