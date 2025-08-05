@@ -2,6 +2,7 @@ from app.db.models import User
 from app.users.schemas import UserResponse, UserRequest
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from app.users.hasher import Hasher
 
 
 def convert_to_user_response(user: User) -> UserResponse:
@@ -22,7 +23,10 @@ def get_user_by_id(id: int, db: Session) -> UserResponse:
 
 
 def add_user(user: UserRequest, db: Session) -> UserResponse:
-    new_user = User(**user.dict())
+    user_data = user.dict()
+    user_data.pop("password")
+    new_user = User(**user_data)
+    new_user.hashed_password = Hasher.get_password_hash(user.password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

@@ -7,7 +7,7 @@ class UserRequest(BaseModel):
     username: str
     email: EmailStr
     full_name: str
-    hashed_password: str
+    password: str
 
 
 class UserResponse(BaseModel):
