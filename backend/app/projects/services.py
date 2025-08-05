@@ -40,10 +40,10 @@ def update_project(id: int, project: ProjectRequest, db: Session) -> ProjectResp
     return convert_to_project_response(old_project, db)
 
 
-def delete_project(id: int, db: Session) -> str:
+def delete_project(id: int, db: Session) -> None:
     project = db.query(Project).get(id)
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found!")
     db.delete(project)
     db.commit()
-    return 'Project deleted successfully.'
+    return None
