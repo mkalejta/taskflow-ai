@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import Base and settings
 from app.db.db import Base
-from app.db.models import User, Task, Project, Tag, Chat, ChatMessages
+from app.db.models import User, Task, Project, Tag, Chat, ChatMessage
 from app.settings import postgres as settings
 
 # Dynamic URL
