@@ -20,9 +20,9 @@ class Task(Base):
     priority = Column(String, nullable=False)
     status = Column(String, nullable=False)
     assigned_to = Column(Integer, ForeignKey('users.id'), nullable=True)
-    due_date = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, nullable=False)
-    updated_at = Column(DateTime, nullable=True)
+    due_to = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=func.now())
     project_id = Column(Integer, ForeignKey('projects.id'), nullable=False)
 
     project = relationship('Project', back_populates='tasks')
