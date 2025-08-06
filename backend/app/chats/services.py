@@ -49,7 +49,7 @@ def update_chat(chat_id: int, chat: ChatRequest, db: Session) -> ChatResponse:
     old_chat = db.get(Chat, chat_id)
     if old_chat is None:
         raise HTTPException(status_code=404, detail="Chat not found!")
-    for k, v in chat.dict().items():
+    for k, v in chat.dict(exclude={'id', 'user_id'}).items():
         setattr(old_chat, k, v)
     db.commit()
     db.refresh(old_chat)
