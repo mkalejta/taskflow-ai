@@ -4,6 +4,10 @@ class ChatMessage(BaseModel):
     role: str = Field(..., description="The role of the author's message, e.g., 'users' or 'assistant'.")
     content: str = Field(..., description="The content of the message.")
 
+    class Config:
+        orm_mode = True
+
+
 class ChatCompletionRequest(BaseModel):
     model: str = Field(..., description="The model to use for the chats completion.")
     messages: list[ChatMessage] = Field(..., description="A list of messages in the chats conversation.")
