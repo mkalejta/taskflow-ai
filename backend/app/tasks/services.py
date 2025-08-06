@@ -1,4 +1,4 @@
-from app.db.models import Task, User
+from app.db.models import Task
 from app.tasks.schemas import TaskRequest, TaskResponse
 from sqlalchemy.orm import Session, joinedload
 from fastapi import HTTPException
@@ -24,11 +24,15 @@ def convert_task_to_response(task: Task) -> TaskResponse:
 
 
 def get_all_tasks(db: Session) -> list[TaskResponse]:
-    tasks = db.query(Task).options(joinedload(Task.author), joinedload(Task.assignee)).all()  # automatic data attachment from 'users' table to sent less request to db
+    tasks = db.query(Task).options(
+        joinedload(Task.author),
+        joinedload(Task.assignee),
+        joinedload(Task.tags)
+    ).all()  # automatic data attachment from 'users' table to sent less request to db
     return [convert_task_to_response(t) for t in tasks]
 
 def get_task_by_id(id: int, db: Session) -> TaskResponse:
-    task = db.query(Task).get(id)
+    task = db.get(Task, id)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found!")
     return convert_task_to_response(task)
@@ -44,7 +48,7 @@ def add_task(task: TaskRequest, db: Session) -> TaskResponse:
     return convert_task_to_response(new_task)
 
 def update_task(id: int, task: TaskRequest, db: Session) -> TaskResponse:
-    old_task = db.query(Task).get(id)
+    old_task = db.get(Task, id)
     if old_task is None:
         raise HTTPException(status_code=404, detail="Task not found!")
     task_data = task.dict()
@@ -57,9 +61,8 @@ def update_task(id: int, task: TaskRequest, db: Session) -> TaskResponse:
     return convert_task_to_response(old_task)
 
 def delete_task(id: int, db: Session) -> None:
-    task = db.query(Task).get(id)
+    task = db.get(Task, id)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found!")
     db.delete(task)
     db.commit()
-    return None

@@ -34,7 +34,7 @@ def get_all_users(db: Session) -> list[UserResponse]:
 
 
 def get_user_by_id(id: int, db: Session) -> UserResponse:
-    user = db.query(User).get(id)
+    user = db.get(User, id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found!")
     return convert_to_user_response(user)
@@ -52,7 +52,7 @@ def add_user(user: UserRequest, db: Session) -> UserResponse:
 
 
 def update_user(id: int, user: UserRequest, db: Session) -> UserResponse:
-    old_user = db.query(User).get(id)
+    old_user = db.get(User, id)
     if old_user is None:
         raise HTTPException(status_code=404, detail="User not found!")
     for k, v in user.dict().items():
@@ -63,12 +63,11 @@ def update_user(id: int, user: UserRequest, db: Session) -> UserResponse:
 
 
 def delete_user(id: int, db: Session) -> None:
-    user = db.query(User).get(id)
+    user = db.get(User, id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found!")
     db.delete(user)
     db.commit()
-    return None
 
 
 
