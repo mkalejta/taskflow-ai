@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from app.projects.schemas import ProjectResponse
 from app.tasks.schemas import TaskResponse
-from app.chats.schemas import ChatMessage
+from app.chats.schemas import ChatResponse
 
 class UserRequest(BaseModel):
     username: str
@@ -19,7 +19,7 @@ class UserResponse(BaseModel):
     assigned_tasks: list[TaskResponse]
     authored_tasks: list[TaskResponse]
     projects: list[ProjectResponse]
-    chats: list[ChatMessage]
+    chats: list[ChatResponse]
 
     class Config:
         orm_mode = True

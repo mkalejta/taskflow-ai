@@ -3,7 +3,7 @@ from app.users.schemas import UserResponse, UserRequest
 from sqlalchemy.orm import Session, joinedload
 from fastapi import HTTPException
 from app.users.hasher import Hasher
-from app.chats.schemas import ChatMessage
+from app.chats.services import convert_chat_to_response
 from app.projects.services import convert_to_project_response
 from app.tasks.services import convert_task_to_response
 
@@ -19,7 +19,7 @@ def convert_to_user_response(user: User) -> UserResponse:
         "assigned_tasks": [convert_task_to_response(t) for t in user.assigned_tasks],
         "authored_tasks": [convert_task_to_response(t) for t in user.authored_tasks],
         "projects": [convert_to_project_response(p) for p in user.projects],
-        "chats": [ChatMessage.from_orm(c) for c in user.chats],
+        "chats": [convert_chat_to_response(c) for c in user.chats],
     }
     return UserResponse(**user_dict)
 

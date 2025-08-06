@@ -66,19 +66,21 @@ class Chat(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    title = Column(String(50), nullable=False)
+    description = Column(String(250), nullable=True)
 
     user = relationship('User', back_populates='chats')
-    chat_messages = relationship('ChatMessages', back_populates='chat')
+    chat_messages = relationship('ChatMessage', back_populates='chat')
 
 
-class ChatMessages(Base):
+class ChatMessage(Base):
     __tablename__ = 'chat_messages'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     chat_id = Column(Integer, ForeignKey('chats.id'), nullable=False)
-    role = Column(String, nullable=False)  # e.g., 'user', 'assistant'
+    role = Column(String, nullable=False)  # e.g., 'user', 'assistant', 'system'
     content = Column(String, nullable=False)
-    created_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
     chat = relationship('Chat', back_populates='chat_messages')
 
