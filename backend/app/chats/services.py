@@ -30,7 +30,7 @@ def chat_by_id(chat_id: int, db: Session) -> ChatResponse:
 def create_chat(chat: ChatRequest, message: MessageRequest, db: Session) -> ChatResponse:
     chat_dict = chat.dict()
     if chat.title is None:
-        chat_dict["title"] = message.content[:20] + '...'    # Default title is first 20 characters of entry message + '...'
+        chat_dict["title"] = message.content[:20] + ('...' if len(message.content) > 20 else '')   # Default title is first 20 characters of entry message + '...' if truncated
     new_chat = Chat(**chat_dict)
     db.add(new_chat)
     db.commit()
@@ -74,8 +74,5 @@ def delete_chat(chat_id: int, db: Session) -> None:
     chat = db.get(Chat, chat_id)
     if chat is None:
         raise HTTPException(status_code=404, detail="Chat not found!")
-    messages = db.query(ChatMessage).filter(ChatMessage.chat_id == chat_id).all()
-    for message in messages:
-        db.delete(message)
     db.delete(chat)
     db.commit()

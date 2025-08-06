@@ -70,7 +70,7 @@ class Chat(Base):
     description = Column(String(250), nullable=True)
 
     user = relationship('User', back_populates='chats')
-    chat_messages = relationship('ChatMessage', back_populates='chat')
+    chat_messages = relationship('ChatMessage', backref='chat', cascade='all, delete')
 
 
 class ChatMessage(Base):
@@ -81,8 +81,6 @@ class ChatMessage(Base):
     role = Column(String, nullable=False)  # e.g., 'user', 'assistant', 'system'
     content = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
-
-    chat = relationship('Chat', back_populates='chat_messages')
 
 
 class Tag(Base):
