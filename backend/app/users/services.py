@@ -33,14 +33,22 @@ def get_all_users(db: Session) -> list[UserResponse]:
     return [convert_to_user_response(user) for user in users]
 
 
-def get_user_by_id(id: int, db: Session) -> UserResponse:
-    user = db.get(User, id)
+def get_user_by_id(user_id: int, db: Session) -> UserResponse:
+    user = db.get(User, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found!")
     return convert_to_user_response(user)
 
 
 def add_user(user: UserRequest, db: Session) -> UserResponse:
+    user_with_same_username = db.query(User).filter(User.username == user.username).first()
+    if user_with_same_username is not None:
+        raise HTTPException(status_code=409, detail="User with this username already exists!")
+
+    user_with_same_email = db.query(User).filter(User.email == user.email).first()
+    if user_with_same_email is not None:
+        raise HTTPException(status_code=409, detail="User with this email already exists!")
+
     user_data = user.dict()
     user_data.pop("password")
     new_user = User(**user_data)
@@ -51,10 +59,19 @@ def add_user(user: UserRequest, db: Session) -> UserResponse:
     return convert_to_user_response(new_user)
 
 
-def update_user(id: int, user: UserRequest, db: Session) -> UserResponse:
-    old_user = db.get(User, id)
+def update_user(user_id: int, user: UserRequest, db: Session) -> UserResponse:
+    old_user = db.get(User, user_id)
     if old_user is None:
         raise HTTPException(status_code=404, detail="User not found!")
+
+    user_with_same_username = db.query(User).filter(User.username == user.username).first()
+    if user_with_same_username is not None and user_with_same_username.id != user_id:
+        raise HTTPException(status_code=409, detail="User with this username already exists!")
+
+    user_with_same_email = db.query(User).filter(User.email == user.email).first()
+    if user_with_same_email is not None and user_with_same_email.id != user_id:
+        raise HTTPException(status_code=409, detail="User with this email already exists!")
+
     for k, v in user.dict().items():
         setattr(old_user, k, v)
     db.commit()
@@ -62,8 +79,8 @@ def update_user(id: int, user: UserRequest, db: Session) -> UserResponse:
     return convert_to_user_response(old_user)
 
 
-def delete_user(id: int, db: Session) -> None:
-    user = db.get(User, id)
+def delete_user(user_id: int, db: Session) -> None:
+    user = db.get(User, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found!")
     db.delete(user)
