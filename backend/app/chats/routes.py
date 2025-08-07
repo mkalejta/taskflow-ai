@@ -27,5 +27,5 @@ async def update_messages(chat_id: int, message: MessageRequest, db: Session = D
     return cs.update_messages(chat_id, message, db)
 
 @router.delete('/{chat_id}', status_code=204)
-async def delete_chat(chat_id: int, db: Session = Depends(get_db)):
+async def delete_chat(chat_id: int, db: Session = Depends(get_db)) -> None:
     cs.delete_chat(chat_id, db)

@@ -23,5 +23,5 @@ async def update_project(project_id: int, project: ProjectRequest, db: Session =
     return ps.update_project(project_id, project, db)
 
 @router.delete('/{project_id}', status_code=204)
-async def delete_project(project_id: int, db: Session = Depends(get_db)):
+async def delete_project(project_id: int, db: Session = Depends(get_db)) -> None:
     ps.delete_project(project_id, db)
