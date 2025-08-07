@@ -87,6 +87,6 @@ class Tag(Base):
     __tablename__ = 'tags'
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
 
     tasks = relationship('Task', secondary=association_table, back_populates='tags')
