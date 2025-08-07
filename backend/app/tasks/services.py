@@ -22,6 +22,17 @@ def convert_task_to_response(task: Task) -> TaskResponse:
     }
     return TaskResponse(**task_dict)
 
+def convert_tags(tags: list[TagRequest], db: Session) -> list[Tag]:
+    """Converts list of TagRequest to list of Tag ORM"""
+    task_tags = []
+    for tag_req in tags:
+        tag = db.query(Tag).filter_by(name=tag_req.name).first()
+        if not tag:
+            tag = Tag(name=tag_req.name)
+            db.add(tag)
+            db.flush()
+        task_tags.append(tag)
+    return task_tags
 
 def get_all_tasks(db: Session) -> list[TaskResponse]:
     tasks = db.query(Task).options(
@@ -43,14 +54,7 @@ def add_task(task: TaskRequest, tags: list[TagRequest], db: Session) -> TaskResp
     task_data['status'] = task_data['status'].value
     new_task = Task(**task_data)
     # For each TagRequest in tags, there is check if it exists. If not first we need to add new Tag.
-    task_tags = []
-    for tag_req in tags:
-        tag = db.query(Tag).filter_by(name=tag_req.name).first()
-        if not tag:
-            tag = Tag(name=tag_req.name)
-            db.add(tag)
-            db.flush()
-        task_tags.append(tag)
+    task_tags = convert_tags(tags, db)
     new_task.tags = task_tags
     db.add(new_task)
     db.commit()
@@ -74,14 +78,7 @@ def update_task_tags(task_id: int, tags: list[TagRequest], db: Session) -> TaskR
     old_task = db.get(Task, task_id)
     if old_task is None:
         raise HTTPException(status_code=404, detail="Task not found!")
-    updated_tags = []
-    for tag_req in tags:
-        tag = db.query(Tag).filter_by(name=tag_req.name).first()
-        if not tag:
-            tag = Tag(name=tag_req.name)
-            db.add(tag)
-            db.flush()
-        updated_tags.append(tag)
+    updated_tags = convert_tags(tags, db)
     old_task.tags = updated_tags
     db.commit()
     db.refresh(old_task)
