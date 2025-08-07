@@ -38,7 +38,7 @@ def update_tag(tag_id: int, tag: TagRequest, db: Session) -> TagResponse:
     if old_tag is None:
         raise HTTPException(status_code=404, detail="Tag not found!")
     if_exists = db.query(Tag).filter(Tag.name == tag.name).first()
-    if if_exists is not None:
+    if if_exists is not None and if_exists.id != tag_id:
         raise HTTPException(status_code=409, detail="Tag with new name already exists!")
     setattr(old_tag, 'name', tag.name)
     db.commit()

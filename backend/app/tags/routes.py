@@ -22,6 +22,6 @@ async def add_tag(tag: TagRequest, db: Session = Depends(get_db)):
 async def update_tag(tag_id: int, tag: TagRequest, db: Session = Depends(get_db)):
     return ts.update_tag(tag_id, tag, db)
 
-@router.delete("{tag_id}", status_code=204)
+@router.delete("/{tag_id}", status_code=204)
 async def delete_tag(tag_id: int, db: Session = Depends(get_db)) -> None:
     ts.delete_tag(tag_id, db)
