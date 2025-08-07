@@ -14,7 +14,6 @@ class TaskRequest(BaseModel):
     assigned_to: int
     due_to: datetime
     project_id: int
-    tags: list[TagRequest]
 
 
 class TaskResponse(BaseModel):
