@@ -43,7 +43,7 @@ def update_project(id: int, project: ProjectRequest, db: Session) -> ProjectResp
     old_project = db.get(Project, id)
     if old_project is None:
         raise HTTPException(status_code=404, detail="Project not found!")
-    for k, v in project.dict().items():
+    for k, v in project.dict(exclude={'author_id'}).items():
         setattr(old_project, k, v)
     db.commit()
     db.refresh(old_project)

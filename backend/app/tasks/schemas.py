@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from app.enums.Priority import Priority
 from app.enums.Status import Status
 from datetime import datetime
-from app.tags.schemas import TagResponse
+from app.tags.schemas import TagResponse, TagRequest
 
 
 class TaskRequest(BaseModel):
@@ -14,6 +14,7 @@ class TaskRequest(BaseModel):
     assigned_to: int
     due_to: datetime
     project_id: int
+    tags: list[TagRequest]
 
 
 class TaskResponse(BaseModel):
