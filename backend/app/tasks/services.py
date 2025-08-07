@@ -2,7 +2,7 @@ from app.db.models import Task, Tag
 from app.tasks.schemas import TaskRequest, TaskResponse
 from sqlalchemy.orm import Session, joinedload
 from fastapi import HTTPException
-from app.tags.schemas import TagResponse
+from app.tags.schemas import TagResponse, TagRequest
 
 def convert_task_to_response(task: Task) -> TaskResponse:
     """Converts Task ORM object to TaskResponse object"""
@@ -31,34 +31,34 @@ def get_all_tasks(db: Session) -> list[TaskResponse]:
     ).all()  # automatic data attachment from 'users' table to sent less request to db
     return [convert_task_to_response(t) for t in tasks]
 
-def get_task_by_id(id: int, db: Session) -> TaskResponse:
-    task = db.get(Task, id)
+def get_task_by_id(task_id: int, db: Session) -> TaskResponse:
+    task = db.get(Task, task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found!")
     return convert_task_to_response(task)
 
-def add_task(task: TaskRequest, db: Session) -> TaskResponse:
-    task_data = task.dict(exclude={'tags'})
+def add_task(task: TaskRequest, tags: list[TagRequest], db: Session) -> TaskResponse:
+    task_data = task.dict()
     task_data['priority'] = task_data['priority'].value
     task_data['status'] = task_data['status'].value
     new_task = Task(**task_data)
     # For each TagRequest in tags, there is check if it exists. If not first we need to add new Tag.
-    tags = []
-    for tag_req in task.tags:
+    task_tags = []
+    for tag_req in tags:
         tag = db.query(Tag).filter_by(name=tag_req.name).first()
         if not tag:
             tag = Tag(name=tag_req.name)
             db.add(tag)
             db.flush()
-        tags.append(tag)
-    new_task.tags = tags
+        task_tags.append(tag)
+    new_task.tags = task_tags
     db.add(new_task)
     db.commit()
     db.refresh(new_task)
     return convert_task_to_response(new_task)
 
-def update_task(id: int, task: TaskRequest, db: Session) -> TaskResponse:
-    old_task = db.get(Task, id)
+def update_task_details(task_id: int, task: TaskRequest, db: Session) -> TaskResponse:
+    old_task = db.get(Task, task_id)
     if old_task is None:
         raise HTTPException(status_code=404, detail="Task not found!")
     task_data = task.dict(exclude={'author_id', 'project_id'})
@@ -70,8 +70,25 @@ def update_task(id: int, task: TaskRequest, db: Session) -> TaskResponse:
     db.refresh(old_task)
     return convert_task_to_response(old_task)
 
-def delete_task(id: int, db: Session) -> None:
-    task = db.get(Task, id)
+def update_task_tags(task_id: int, tags: list[TagRequest], db: Session) -> TaskResponse:
+    old_task = db.get(Task, task_id)
+    if old_task is None:
+        raise HTTPException(status_code=404, detail="Task not found!")
+    updated_tags = []
+    for tag_req in tags:
+        tag = db.query(Tag).filter_by(name=tag_req.name).first()
+        if not tag:
+            tag = Tag(name=tag_req.name)
+            db.add(tag)
+            db.flush()
+        updated_tags.append(tag)
+    old_task.tags = updated_tags
+    db.commit()
+    db.refresh(old_task)
+    return convert_task_to_response(old_task)
+
+def delete_task(task_id: int, db: Session) -> None:
+    task = db.get(Task, task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found!")
     db.delete(task)
