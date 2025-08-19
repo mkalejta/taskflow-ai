@@ -2,7 +2,6 @@ from app.db.models import User
 from app.users.schemas import UserResponse, UserRequest
 from sqlalchemy.orm import Session, joinedload
 from fastapi import HTTPException
-from app.users.hasher import Hasher
 from app.chats.services import convert_chat_to_response
 from app.projects.services import convert_to_project_response
 from app.tasks.services import convert_task_to_response
@@ -38,26 +37,6 @@ def get_user_by_id(user_id: int, db: Session) -> UserResponse:
     if user is None:
         raise HTTPException(status_code=404, detail="User not found!")
     return convert_to_user_response(user)
-
-
-def add_user(user: UserRequest, db: Session) -> UserResponse:
-    user_with_same_username = db.query(User).filter(User.username == user.username).first()
-    if user_with_same_username is not None:
-        raise HTTPException(status_code=409, detail="User with this username already exists!")
-
-    user_with_same_email = db.query(User).filter(User.email == user.email).first()
-    if user_with_same_email is not None:
-        raise HTTPException(status_code=409, detail="User with this email already exists!")
-
-    user_data = user.dict()
-    user_data.pop("password")
-    new_user = User(**user_data)
-    new_user.hashed_password = Hasher.get_password_hash(user.password)
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return convert_to_user_response(new_user)
-
 
 def update_user(user_id: int, user: UserRequest, db: Session) -> UserResponse:
     old_user = db.get(User, user_id)
